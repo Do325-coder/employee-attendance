@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Monthly report{% endblock %}
+{% block content %}
+<div class="head"><h1>Attendance report: {{ month_name }} {{ year }}</h1>
+  <div class="actions"><button class="btn ghost" onclick="window.print()">Print report</button><a class="btn" href="{% url 'payroll' %}?month={{ month }}&year={{ year }}">Go to payroll</a></div></div>
+{% include "partials/period.html" %}
+<section class="card"><div class="scroll"><table>
+  <tr><th>Employee</th><th>Present</th><th>Half days</th><th>Leave</th><th>Absent</th><th>Absent days</th><th>Per-day pay</th><th>Deduction</th><th>Net salary</th></tr>
+  {% for r in rows %}<tr><td>{{ r.emp.name }}</td><td>{{ r.present }}</td><td>{{ r.half }}</td><td>{{ r.leave }}</td><td>{{ r.absent }}</td><td>{{ r.absent_days }}</td>
+    <td>₹{{ r.per_day }}</td><td>₹{{ r.deduction }}</td><td><b>₹{{ r.net }}</b></td></tr>
+  {% empty %}<tr><td colspan="9" class="empty">No active employees.</td></tr>{% endfor %}
+  {% if rows %}<tr class="total"><td colspan="7">Total</td><td>₹{{ total_ded }}</td><td>₹{{ total_net }}</td></tr>{% endif %}
+</table></div>
+<p class="note">Absent days = absences + half the half-days. Net = basic - (absent days x per-day pay). Paid leave is not deducted.</p></section>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Today's attendance{% endblock %}
+{% block content %}
+<div class="head"><h1>Check-in / check-out <small>{{ today|date:"l, j F" }}</small></h1><a class="btn ghost" href="{% url 'attendance_add' %}">Add past entry</a></div>
+<section class="card"><div class="scroll"><table>
+  <tr><th>Employee</th><th>Status</th><th>In</th><th>Out</th><th>Actions</th></tr>
+  {% for e, a in rows %}<tr>
+    <td>{{ e.name }}<br><small>{{ e.designation }}</small></td>
+    <td>{% if a %}<span class="tag {{ a.status }}">{{ a.get_status_display }}</span>{% else %}<span class="tag">Not marked</span>{% endif %}</td>
+    <td>{{ a.check_in|time:"H:i"|default:"-" }}</td><td>{{ a.check_out|time:"H:i"|default:"-" }}</td>
+    <td><form method="post" class="inline">{% csrf_token %}<input type="hidden" name="emp_id" value="{{ e.id }}">
+      <button class="btn sm" name="action" value="check_in" {% if a.check_in %}disabled{% endif %}>Check in</button>
+      <button class="btn sm ghost" name="action" value="check_out" {% if not a.check_in or a.check_out %}disabled{% endif %}>Check out</button>
+      <button class="btn sm ghost" name="action" value="H">Half day</button>
+      <button class="btn sm ghost" name="action" value="L">Leave</button>
+      <button class="btn sm ghost" name="action" value="A">Absent</button></form></td></tr>
+  {% empty %}<tr><td colspan="5" class="empty">No active employees. <a href="{% url 'employee_add' %}">Add one first.</a></td></tr>{% endfor %}
+</table></div></section>
+{% endblock %}

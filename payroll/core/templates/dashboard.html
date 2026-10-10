@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="head"><h1>Today, {{ today|date:"j F Y" }}</h1>
+  <div class="actions"><a class="btn" href="{% url 'attendance_today' %}">Mark attendance</a><a class="btn ghost" href="{% url 'employee_add' %}">Add employee</a></div></div>
+<section class="stats">
+  <a class="stat" href="{% url 'employee_list' %}"><span>Active employees</span><b>{{ total }}</b></a>
+  <a class="stat ok" href="{% url 'attendance_today' %}"><span>Present today</span><b>{{ present }}</b></a>
+  <a class="stat bad" href="{% url 'attendance_today' %}"><span>Absent today</span><b>{{ absent }}</b></a>
+  <a class="stat warn" href="{% url 'attendance_today' %}"><span>On leave</span><b>{{ leave }}</b></a>
+  <a class="stat" href="{% url 'attendance_today' %}"><span>Not marked yet</span><b>{{ unmarked }}</b></a>
+  <a class="stat navy" href="{% url 'payroll' %}"><span>This month's net payroll</span><b>₹{{ payroll|floatformat:0 }}</b></a>
+</section>
+<section class="card">
+  <h2>Latest check-ins</h2>
+  {% if recent %}<table><tr><th>Employee</th><th>Status</th><th>In</th><th>Out</th></tr>
+  {% for a in recent %}<tr><td>{{ a.emp.name }}</td><td><span class="tag {{ a.status }}">{{ a.get_status_display }}</span></td><td>{{ a.check_in|time:"H:i"|default:"-" }}</td><td>{{ a.check_out|time:"H:i"|default:"-" }}</td></tr>{% endfor %}</table>
+  {% else %}<p class="empty">No attendance marked today. <a href="{% url 'attendance_today' %}">Start with check-ins.</a></p>{% endif %}
+</section>
+{% endblock %}

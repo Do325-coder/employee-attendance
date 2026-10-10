@@ -1,0 +1,22 @@
+from django.contrib.auth import views as auth
+from django.urls import path
+
+from . import views as v
+
+urlpatterns = [
+    path("login/", auth.LoginView.as_view(template_name="login.html"), name="login"),
+    path("logout/", auth.LogoutView.as_view(), name="logout"),
+    path("", v.dashboard, name="dashboard"),
+    path("employees/", v.EmployeeList.as_view(), name="employee_list"),
+    path("employees/add/", v.EmployeeCreate.as_view(), name="employee_add"),
+    path("employees/<int:pk>/edit/", v.EmployeeUpdate.as_view(), name="employee_edit"),
+    path("employees/<int:pk>/delete/", v.EmployeeDelete.as_view(), name="employee_delete"),
+    path("attendance/today/", v.attendance_today, name="attendance_today"),
+    path("attendance/", v.AttendanceList.as_view(), name="attendance_list"),
+    path("attendance/add/", v.AttendanceCreate.as_view(), name="attendance_add"),
+    path("attendance/<int:pk>/edit/", v.AttendanceUpdate.as_view(), name="attendance_edit"),
+    path("attendance/<int:pk>/delete/", v.AttendanceDelete.as_view(), name="attendance_delete"),
+    path("reports/monthly/", v.monthly_report, name="report"),
+    path("payroll/", v.payroll, name="payroll"),
+    path("payroll/slip/<int:pk>/", v.slip, name="slip"),
+]

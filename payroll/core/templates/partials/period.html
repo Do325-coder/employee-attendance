@@ -1,0 +1,5 @@
+<form method="get" class="filters">
+  <label>Month <select name="month" onchange="this.form.submit()">{% for m, name in months %}<option value="{{ m }}" {% if m == month %}selected{% endif %}>{{ name }}</option>{% endfor %}</select></label>
+  <label>Year <select name="year" onchange="this.form.submit()">{% for y in years %}<option value="{{ y }}" {% if y == year %}selected{% endif %}>{{ y }}</option>{% endfor %}</select></label>
+  {{ extra }}
+</form>
